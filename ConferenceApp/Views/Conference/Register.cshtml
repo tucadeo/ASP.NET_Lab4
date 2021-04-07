@@ -1,0 +1,98 @@
+﻿@model ConferenceApp.Models.RegisterConferenceUserViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h1>Register</h1>
+
+<h4>Conference User</h4>
+<hr/>
+
+<div class="row">
+    <div class="col-md-4">
+        <form enctype="multipart/form-data" asp-controller="Conference" asp-action="Register" method="post" asp-antiforgery="true">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control"/>
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control"/>
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control"/>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ConferenceType" class="control-label"></label>
+                <select class="form-control" asp-for="ConferenceType" asp-items="@Html.GetEnumSelectList<ConferenceType>()">
+                    <option value="">--Wybierz--</option>
+                </select>
+                <span asp-validation-for="ConferenceType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Photo" class="control-label"></label>
+                <div class="custom-file">
+                    <input multiple asp-for="Photo" class="form-control custom-file-input">
+                    <label class="custom-file-label">Choose file...</label>
+                </div>
+            </div>
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+
+            <dnt-captcha asp-captcha-generator-max="999999"
+                         asp-captcha-generator-min="111111"
+                         asp-captcha-generator-language="English"
+                         asp-captcha-generator-display-mode="ShowDigits"
+                         asp-use-relative-urls="true"
+                         asp-placeholder="Enter Captcha"
+                         asp-validation-error-message="Please enter the security code."
+                         asp-font-name="Tahoma"
+                         asp-font-size="20"
+                         asp-fore-color="#333333"
+                         asp-back-color="#ccc"
+                         asp-text-box-class="text-box form-control"
+                         asp-text-box-template="<span class='input-group-prepend'><span class='form-group-text'></span></span>{0}"
+                         asp-validation-message-class="text-danger"
+                         asp-refresh-button-class="fas fa-redo btn-sm"
+                         asp-use-noise="false"/>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Create" class="btn btn-primary"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('.custom-file-input').on("change", function () {
+                const fileLabel = $(this).next('.custom-file-label');
+                const files = $(this)[0].files;
+                
+                if (files.length > 1) {
+                    fileLabel.html(files.length + ' files selected');
+                }
+                else if (files.length === 1) {
+                    fileLabel.html(files[0].name);
+                }
+            });
+        });
+    </script>
+}
